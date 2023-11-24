@@ -53,17 +53,14 @@ public class Dijkstra {
     Map<Vertex<String>, Double> costs = new HashMap<>();
     Map<Vertex<String>, Vertex<String>> predecessors = new HashMap<>();
 
-    // Inicializa os custos com Double.MAX_VALUE
     for (Vertex<String> vertex : graph.vertices()) {
       costs.put(vertex, Double.MAX_VALUE);
       predecessors.put(vertex, null);
       unvisited.add(vertex);
     }
 
-    // Adiciona a origem com custo zero
     costs.put(origin, 0.0);
 
-    // Itera todos os vértices não visitados e aplica o algoritmo de Dijkstra
     while (!unvisited.isEmpty()) {
       Vertex<String> current = findMinimumCostVertex(costs, unvisited);
       unvisited.remove(current);
@@ -72,7 +69,6 @@ public class Dijkstra {
         Vertex<String> neighbor = graph.opposite(current, edge);
         double newCost = costs.get(current) + edge.element().getCost(costType);
 
-        // Atualiza o custo e o predecessor se um caminho mais curto for encontrado
         if (newCost < costs.get(neighbor)) {
           costs.put(neighbor, newCost);
           predecessors.put(neighbor, current);
@@ -85,8 +81,6 @@ public class Dijkstra {
 
 
   private static Vertex<String> findMinimumCostVertex(Map<Vertex<String>, Double> costs, List<Vertex<String>> unvisited) {
-    // If there are any isolated vertices, at some point the vertex that must be chosen
-    // is isolated. We safeguard this with (Double.MAX_VALUE < Double.POSITIVE_INFINITY)
     Vertex<String> minCostVertex = null;
     double minDistance = Double.POSITIVE_INFINITY;
     for (Vertex<String> u : unvisited) {
@@ -106,17 +100,14 @@ public class Dijkstra {
     Map<Vertex<String>, Vertex<String>> predecessors = new HashMap<>();
     Map<Vertex<String>, Edge<Weight, String>> edges = new HashMap<>();
 
-    // Initialize costs with Double.MAX_VALUE
     for (Vertex<String> vertex : g.vertices()) {
       costs.put(vertex, Double.MAX_VALUE);
       predecessors.put(vertex, null);
       unvisited.add(vertex);
     }
 
-    // Add origin with a cost of zero
     costs.put(origin, 0.0);
 
-    // Iterate all unvisited vertices and apply the modified Dijkstra algorithm
     while (!unvisited.isEmpty()) {
       Vertex<String> current = findMinimumCostVertex(costs, unvisited);
       unvisited.remove(current);
@@ -125,7 +116,6 @@ public class Dijkstra {
         Vertex<String> neighbor = g.opposite(current, edge);
         double newCost = costs.get(current) + edge.element().getCost();
 
-        // Update cost, predecessor, and edge if a shorter path is found
         if (newCost < costs.get(neighbor)) {
           costs.put(neighbor, newCost);
           predecessors.put(neighbor, current);

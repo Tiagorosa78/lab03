@@ -1,5 +1,6 @@
 package model;
 
+import com.brunomnsilva.smartgraph.graph.Edge;
 import com.brunomnsilva.smartgraph.graph.Graph;
 import com.brunomnsilva.smartgraph.graph.GraphEdgeList;
 import com.brunomnsilva.smartgraph.graph.Vertex;
@@ -107,6 +108,21 @@ class DijskstraTest {
         assertEquals(2, shortestPath.size() - 1);
     }
 
+    @Test
+    void getMinimumCostPathEdgesTo() {
+        graph.insertEdge(findVertex("B"), findVertex("C"), new Weight("B-C other", 1));
+        graph.insertEdge(findVertex("E"), findVertex("D"), new Weight("E-D other", 2));
+
+        DijkstraResult<String, Weight> result = Dijkstra.dijkstraEdges(graph, findVertex("C"));
+
+        Vertex<String> destination = findVertex("D");
+
+        Collection<Edge<Weight, String>> pathEdges = result.getMinimumCostPathEdgesTo(destination);
+
+        assertEquals(2, pathEdges.size());
+        assertEquals(5, result.getMinimumCostTo(findVertex("D")));
+    }
+
     Vertex<String> findVertex(String element){
         Vertex<String> vertex = graph.vertices()
                 .stream()
@@ -115,5 +131,4 @@ class DijskstraTest {
                 .orElseThrow(() -> new RuntimeException("Vertex not found: " + element));
         return vertex;
     }
-
 }

@@ -46,7 +46,7 @@ public class DijkstraResult<V, E> {
         this.origin = origin;
         this.costs = costs;
         this.predecessors = predecessors;
-        this.edges = edges; // Initialize the edges field
+        this.edges = edges;
     }
 
     /**
@@ -88,7 +88,6 @@ public class DijkstraResult<V, E> {
             path.add(current);
             current = predecessors.get(current);
         }
-        // Reverse the list to get the correct order from origin to destination
         Collections.reverse(path);
 
         return path;
@@ -100,7 +99,6 @@ public class DijkstraResult<V, E> {
         List<Edge<E, V>> pathEdges = new ArrayList<>();
         Vertex<V> current = destination;
 
-        // Traverse the predecessors to reconstruct the path
         while (predecessors.get(current) != null) {
             Vertex<V> predecessor = predecessors.get(current);
             Edge<E, V> edge = edges.get(predecessor);
@@ -108,7 +106,6 @@ public class DijkstraResult<V, E> {
             current = predecessor;
         }
 
-        // Reverse the list to get the path in the correct order
         Collections.reverse(pathEdges);
 
         return pathEdges;
@@ -116,8 +113,6 @@ public class DijkstraResult<V, E> {
 
     private void verifyPathExistence(Vertex<V> destination)
                                 throws NoPathException {
-        // If there is no predecessor assigned to 'destination', then
-        // there is surely no path to it.
         if(predecessors.get(destination) == null) {
             throw new NoPathException(destination.element().toString());
         }
@@ -125,7 +120,6 @@ public class DijkstraResult<V, E> {
 
     @Override
     public String toString() {
-        // Prints result in a tabular format
         List<Vertex<V>> vertices = new ArrayList<>( costs.keySet() );
         Collections.sort(vertices, Comparator.comparing(v -> v.element().toString()));
 
