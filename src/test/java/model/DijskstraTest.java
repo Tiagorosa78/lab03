@@ -46,25 +46,17 @@ class DijskstraTest {
 
         DijkstraResult<String, Weight> result = Dijkstra.dijkstra(graph, origin);
 
-
         Vertex<String> destination = findVertex("D");
 
-        try {
-            Collection<Vertex<String>> path = result.getMinimumCostPathTo(destination);
+        Collection<Vertex<String>> path = result.getMinimumCostPathTo(destination);
 
+        assertEquals(4, path.size());
 
-            assertEquals(4, path.size());
-
-
-            Object[] pathArray = path.toArray();
-            assertEquals("C", ((Vertex<String>) pathArray[0]).element());
-            assertEquals("E", ((Vertex<String>) pathArray[1]).element());
-            assertEquals("F", ((Vertex<String>) pathArray[2]).element());
-            assertEquals("D", ((Vertex<String>) pathArray[3]).element());
-
-        } catch (NoPathException e) {
-            throw new NoPathException("Invalid Path");
-        }
+        Object[] pathArray = path.toArray();
+        assertEquals("C", ((Vertex<String>) pathArray[0]).element());
+        assertEquals("E", ((Vertex<String>) pathArray[1]).element());
+        assertEquals("F", ((Vertex<String>) pathArray[2]).element());
+        assertEquals("D", ((Vertex<String>) pathArray[3]).element());
     }
 
     @Test
