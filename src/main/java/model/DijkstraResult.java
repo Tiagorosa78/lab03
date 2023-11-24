@@ -1,5 +1,6 @@
 package model;
 
+import com.brunomnsilva.smartgraph.graph.Edge;
 import com.brunomnsilva.smartgraph.graph.Vertex;
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class DijkstraResult<V, E> {
     private Vertex<V> origin;
     private Map<Vertex<V>, Double> costs;
     private Map<Vertex<V>, Vertex<V>> predecessors;
+    private Map<Vertex<V> , Edge<E, V>> edges;
 
     public DijkstraResult(Vertex<V> origin, Map<Vertex<V>, Double> costs, Map<Vertex<V>, Vertex<V>> predecessors) {
         if(origin == null || costs == null || predecessors == null) {
@@ -29,6 +31,22 @@ public class DijkstraResult<V, E> {
         this.origin = origin;
         this.costs = costs;
         this.predecessors = predecessors;
+    }
+
+    public DijkstraResult(Vertex<V> origin,
+                          Map<Vertex<V>, Double> costs,
+                          Map<Vertex<V>, Vertex<V>> predecessors, Map<Vertex<V>, Edge<E, V>> edges){
+        if (origin == null || costs == null || predecessors == null || edges == null) {
+            throw new IllegalArgumentException("Initializers cannot be null");
+        }
+        if (costs.size() == 0 || predecessors.size() == 0 || edges.size() == 0) {
+            throw new IllegalArgumentException("Costs, predecessors, or edges cannot be empty.");
+        }
+
+        this.origin = origin;
+        this.costs = costs;
+        this.predecessors = predecessors;
+        this.edges = edges; // Initialize the edges field
     }
 
     /**
@@ -65,8 +83,35 @@ public class DijkstraResult<V, E> {
         List<Vertex<V>> path = new ArrayList<>();
 
         // TODO: extract path from predecessors
+        Vertex<V> current = destination;
+        while (current != null) {
+            path.add(current);
+            current = predecessors.get(current);
+        }
+        // Reverse the list to get the correct order from origin to destination
+        Collections.reverse(path);
 
         return path;
+    }
+
+    public Collection<Edge<E, V>> getMinimumCostPathEdgesTo(Vertex<V> destination) throws NoPathException {
+        verifyPathExistence(destination);
+
+        List<Edge<E, V>> pathEdges = new ArrayList<>();
+        Vertex<V> current = destination;
+
+        // Traverse the predecessors to reconstruct the path
+        while (predecessors.get(current) != null) {
+            Vertex<V> predecessor = predecessors.get(current);
+            Edge<E, V> edge = edges.get(predecessor);
+            pathEdges.add(edge);
+            current = predecessor;
+        }
+
+        // Reverse the list to get the path in the correct order
+        Collections.reverse(pathEdges);
+
+        return pathEdges;
     }
 
     private void verifyPathExistence(Vertex<V> destination)
@@ -102,5 +147,13 @@ public class DijkstraResult<V, E> {
         }
 
         return sb.toString();
+    }
+
+    public Map<Vertex<V>, Vertex<V>> getPredecessors(){
+        return this.predecessors;
+    }
+
+    public Map<Vertex<V>, Edge<E, V>> getEdges() {
+        return edges;
     }
 }
