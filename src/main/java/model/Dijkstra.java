@@ -48,13 +48,13 @@ public class Dijkstra {
 
 
 
-  public static DijkstraResult<String, Weight> dijkstra(Graph<String, Weight> g, Vertex<String> origin, TypeOfCost type) {
+  public static DijkstraResult<String, Weight> dijkstra(Graph<String, Weight> graph, Vertex<String> origin, TypeOfCost costType) {
     List<Vertex<String>> unvisited = new ArrayList<>();
     Map<Vertex<String>, Double> costs = new HashMap<>();
     Map<Vertex<String>, Vertex<String>> predecessors = new HashMap<>();
 
     // Inicializa os custos com Double.MAX_VALUE
-    for (Vertex<String> vertex : g.vertices()) {
+    for (Vertex<String> vertex : graph.vertices()) {
       costs.put(vertex, Double.MAX_VALUE);
       predecessors.put(vertex, null);
       unvisited.add(vertex);
@@ -68,9 +68,9 @@ public class Dijkstra {
       Vertex<String> current = findMinimumCostVertex(costs, unvisited);
       unvisited.remove(current);
 
-      for (Edge<Weight, String> edge : g.incidentEdges(current)) {
-        Vertex<String> neighbor = g.opposite(current, edge);
-        double newCost = costs.get(current) + edge.element().getCost(type);
+      for (Edge<Weight, String> edge : graph.incidentEdges(current)) {
+        Vertex<String> neighbor = graph.opposite(current, edge);
+        double newCost = costs.get(current) + edge.element().getCost(costType);
 
         // Atualiza o custo e o predecessor se um caminho mais curto for encontrado
         if (newCost < costs.get(neighbor)) {
